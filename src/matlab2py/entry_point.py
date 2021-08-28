@@ -6,7 +6,6 @@ import numpy as np
 from matlab import figure, axes, gca, gcf, groot, plot
 
 if __name__ == "__main__":
-
     g = groot
     print(g)
     print("between")

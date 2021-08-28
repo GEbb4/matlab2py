@@ -1,6 +1,7 @@
 """
 Entry point for figures.
 """
+import logging
 import subprocess
 import sys
 from functools import partial, update_wrapper
@@ -16,6 +17,8 @@ from constants import (
 )
 from helpers import OnOffSwitchState
 from singleton import Singleton
+
+LOGGER = logging.getLogger(__name__)
 
 
 def var_to_str(arr):
@@ -134,7 +137,13 @@ class FigureHandle(object):
 
         # Do as much as we can before this.
         self.process = subprocess.Popen(
-            [f"{sys.executable}", "figure_process.py", str(number)],
+            [
+                f"{sys.executable}",
+                "src/matlab2py/figure_process.py",
+                "--num", f"{self.Number}",
+                "--color", f"{self.Color}",
+                "--dpi", f"{self._parent[0].ScreenPixelsPerInch}",
+            ],
             startupinfo=subprocess.STARTUPINFO(
                 dwFlags=subprocess.DETACHED_PROCESS,
             ),

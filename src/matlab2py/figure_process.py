@@ -1,15 +1,20 @@
 """
 Plotting machinery
 """
+import ast
+import logging
 import queue
 import sys
 import threading
 import time
+from argparse import ArgumentParser
 
 import matplotlib.pyplot as plt
 import numpy as np  # Needed for dynamic code.
 
-from argparse import ArgumentParser
+from debug import create_filelog
+
+LOGGER = logging.getLogger(__name__)
 
 
 def rate_limited_true():
@@ -21,7 +26,9 @@ def rate_limited_true():
 def parser():
     """The argparser."""
     parser = ArgumentParser()
-    parser.add_argument("num")
+    parser.add_argument("--num", type=int)
+    parser.add_argument("--color", type=ast.literal_eval)
+    parser.add_argument("--dpi", type=float)
     return parser
 
 
@@ -38,6 +45,7 @@ def update_plot(input_queue, fig):
         if not input_queue.empty():
             command = input_queue.get()
             if command:
+                LOGGER.debug(f"exec: {command}")
                 exec(command)
 
 
@@ -50,7 +58,7 @@ def make_thread(fn, args):
 
 
 def main(args):
-    fig = plt.figure(f"Figure {args.num}")
+    fig = plt.figure(num=args.num, facecolor=args.color, dpi=args.dpi)
 
     input_queue = queue.Queue()
 
@@ -61,4 +69,10 @@ def main(args):
 
 
 if __name__ == "__main__":
+    logging.basicConfig(
+        handlers=[
+            create_filelog("figure"),
+        ],
+    )
+    LOGGER.setLevel(logging.DEBUG)
     main(parser().parse_args())

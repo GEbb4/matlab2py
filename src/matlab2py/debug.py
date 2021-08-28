@@ -1,40 +1,27 @@
 """
 Functions for debugging.
 """
+import logging
 from datetime import datetime
 from functools import wraps
 from pathlib import Path
 
+from paths import LOG_DIR
+
+LOGGER = logging.getLogger(__name__)
+
 # Set this flag to turn on debugging.
 DEBUG = True
-
-# The root directory of the module, and a folder for logs.
-MODULE_DIR = Path(__file__).parent.resolve()
-LOG_DIR = MODULE_DIR / "logs"
 
 # Format for datetime in log file name.
 LOG_DATE_FMT = "%Y%m%d_%H%M%S"
 
-_current_log = None
 
-
-def if_debugging(func):
-    """
-    Decorator which only runs the function if DEBUG is true.
-    """
-    @wraps(func)
-    def wrapper(*args, **kwargs):
-        """
-        The wrapped function.
-        """
-        if DEBUG:
-            return func(*args, **kwargs)
-    return wrapper
-
-
-@if_debugging
-def create_dbglog():
+def create_filelog(thrd_name):
     """Create a file to be the debug log for this run."""
-    LOG_DIR.mkdir(exist_ok=True)
-    log_file = LOG_DIR / f"dbg_{datetime.now().strftime(LOG_DATE_FMT)}"
-    _current_log = open(log_file, "w")
+    if DEBUG:
+        LOG_DIR.mkdir(exist_ok=True)
+        log_file = LOG_DIR / f"dbg_{thrd_name}_{datetime.now().strftime(LOG_DATE_FMT)}.log"
+        return logging.FileHandler(log_file, mode="w")
+    else:
+        return logging.NullHandler()
