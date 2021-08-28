@@ -1,5 +1,7 @@
 # Generated folders.
 .idea
+dist
+*.egg-info
 
 # Ignore all log files.
 *.log
