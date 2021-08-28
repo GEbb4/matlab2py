@@ -1,0 +1,8 @@
+# Generated folders.
+.idea
+
+# Ignore all log files.
+*.log
+
+# Python generated stuff.
+__pycache__
