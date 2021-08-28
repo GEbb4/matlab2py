@@ -6,6 +6,7 @@ import logging
 import queue
 import sys
 import threading
+import tkinter as tk
 import time
 from argparse import ArgumentParser
 
@@ -60,6 +61,10 @@ def make_thread(fn, args):
 def main(args):
     fig = plt.figure(num=args.num, facecolor=args.color, dpi=args.dpi)
 
+    # Set the toolbar to show at the top of the figure.
+    # (I think this only works for Tk backends...)
+    fig.canvas.toolbar.pack(side=tk.TOP, fill=tk.X)
+
     input_queue = queue.Queue()
 
     input_thread = make_thread(fn=add_stdin_to_queue, args=(input_queue,))
@@ -69,10 +74,6 @@ def main(args):
 
 
 if __name__ == "__main__":
-    logging.basicConfig(
-        handlers=[
-            create_filelog("figure"),
-        ],
-    )
+    logging.basicConfig(handlers=[create_filelog("figure")])
     LOGGER.setLevel(logging.DEBUG)
     main(parser().parse_args())
