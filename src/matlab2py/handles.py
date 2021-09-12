@@ -9,14 +9,14 @@ from platform import system
 
 from screeninfo import get_monitors
 
-from constants import (
+from matlab2py.constants import (
     AX_DEFAULT_POS,
     DPI_ON_DARWIN,
     DPI_ON_WINDOWS,
     FIG_DEFAULT_COLOR,
 )
-from helpers import OnOffSwitchState
-from singleton import Singleton
+from matlab2py.helpers import OnOffSwitchState
+from matlab2py.singleton import Singleton
 
 LOGGER = logging.getLogger(__name__)
 
@@ -160,6 +160,8 @@ class FigureHandle(object):
         """The index of the currently active child."""
         print(f"children: {self._children}")
         print(f"current_child: {self._current_child}")
+        if self._current_child is None:
+            self.add_axes()
         return self._children[self._current_child]
 
     @current_child.setter
@@ -203,7 +205,7 @@ class FigureHandle(object):
     @make_property(list, [0, 0, 100, 100])
     def Position(self, pos):
         """Sets the position of the figure."""
-        pass
+
 
     @make_property(list, list(FIG_DEFAULT_COLOR))
     def Color(self, col):

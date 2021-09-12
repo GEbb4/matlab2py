@@ -6,7 +6,7 @@ from datetime import datetime
 from functools import wraps
 from pathlib import Path
 
-from paths import LOG_DIR
+from matlab2py.paths import LOG_DIR
 
 LOGGER = logging.getLogger(__name__)
 

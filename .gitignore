@@ -8,3 +8,7 @@ dist
 
 # Python generated stuff.
 __pycache__
+
+# Coverage files.
+.coverage
+coverage.xml

@@ -12,10 +12,16 @@ from argparse import ArgumentParser
 
 import matplotlib.pyplot as plt
 import numpy as np  # Needed for dynamic code.
+from matplotlib.font_manager import FontProperties
 
-from debug import create_filelog
+from matlab2py.debug import create_filelog
 
 LOGGER = logging.getLogger(__name__)
+
+# Set the font family to Helvetica to match MATLAB.
+font = FontProperties()
+font.set_name("Helvetica")
+
 
 
 def rate_limited_true():
